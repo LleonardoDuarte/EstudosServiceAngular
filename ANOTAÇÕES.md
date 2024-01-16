@@ -91,3 +91,156 @@ this.baseURL = environment.pokeApi;
   # Observables
 
   - Observable é um método angular muito parecido com as promises do javascript, ou seja, em promises se nao usarmos um await para as chamadas nao iremos retornar os dados, normalmente se retorna um objeto vazio, no angular é a mesma coisa porem nao são promises e sim observables. Para usar o observable primeiramente colocamos ele apos a tipagem da nossa função, o observable possui um argumento que necessita ser colocado, no caso ele espera uma tipagem para que possa funcionar, normalmente cria-se um export type em algum outro arquivo e usa-se nele como typagem generic <>
+
+  # Anotações de código
+
+  # service
+
+  import { Injectable } from '@angular/core';
+
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+@Injectable({
+providedIn: 'root',
+})
+export class PokeApiService {
+private baseURL: string = '';
+
+constructor() {
+this.baseURL = environment.pokeAPI;
+}
+getPokemon(pokemonName: String) {
+console.log(this.baseURL);
+}
+}
+
+# PARTE 2
+
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { PokemonData } from '../model/pokeType';
+
+@Injectable({
+providedIn: 'root',
+})
+export class PokeApiService {
+private baseURL: string = '';
+private pokeData: PokemonData | any;
+
+constructor(private http: HttpClient) {
+this.baseURL = environment.pokeAPI;
+}
+getPokemon(pokemonName: String): Observable<PokemonData> {
+this.pokeData = this.http.get<PokemonData>(`${this.baseURL}${pokemonName}`);
+return this.pokeData;
+}
+}
+
+# PARTE 3
+
+# card component
+
+import { Component, OnInit } from '@angular/core';
+import { PokeApiService } from 'src/app/services/poke-api.service';
+
+@Component({
+selector: 'app-card',
+templateUrl: './card.component.html',
+styleUrls: ['./card.component.css'],
+})
+export class CardComponent implements OnInit {
+constructor(private service: PokeApiService) {}
+
+ngOnInit(): void {
+this.service.getPokemon('charizard');
+}
+}
+
+# PARTE 2
+
+import { Component, OnInit } from '@angular/core';
+import { PokeApiService } from 'src/app/services/poke-api.service';
+
+@Component({
+selector: 'app-card',
+templateUrl: './card.component.html',
+styleUrls: ['./card.component.css'],
+})
+export class CardComponent implements OnInit {
+constructor(private service: PokeApiService) {}
+
+ngOnInit(): void {
+this.service.getPokemon('charizard').subscribe({
+next: (res) => console.log(res),
+error: (error) => console.log(error),
+});
+}
+}
+
+# PARTE 3
+
+import { Component, OnInit } from '@angular/core';
+import { PokeApiService } from 'src/app/services/poke-api.service';
+
+@Component({
+selector: 'app-card',
+templateUrl: './card.component.html',
+styleUrls: ['./card.component.css'],
+})
+export class CardComponent implements OnInit {
+constructor(private service: PokeApiService) {}
+
+ngOnInit(): void {
+this.service.getPokemon('charizard').subscribe({
+next: (res) => {
+console.log(res),
+console.log(res.id)
+console.log(res.sprites.front_default);
+
+      },
+      error: (error) => console.log(error),
+    });
+
+}
+}
+
+# PARTE 4 GUARDANDO EM UMA VARIAVEL
+
+import { Component, OnInit } from '@angular/core';
+import { PokemonData } from 'src/app/model/pokeType';
+import { PokeApiService } from 'src/app/services/poke-api.service';
+
+@Component({
+selector: 'app-card',
+templateUrl: './card.component.html',
+styleUrls: ['./card.component.css'],
+})
+export class CardComponent implements OnInit {
+pokemon?: PokemonData;
+constructor(private service: PokeApiService) {}
+
+ngOnInit(): void {
+this.service.getPokemon('charizard').subscribe({
+next: (res) => {
+this.pokemon = {
+id: res.id,
+name: res.name,
+sprites: res.sprites,
+types: res.types,
+};
+console.log(this.pokemon);
+
+        // o codigo acima é a mesma coisa que o codigo abaixo porem mais organizado dentro de uma variavel
+        // console.log(res);
+        // console.log(res.name);
+        // console.log(res.id);
+        // console.log(res.sprites.front_default);
+        // console.log(res.types);
+      },
+      error: (error) => console.log(error),
+    });
+
+}
+}
