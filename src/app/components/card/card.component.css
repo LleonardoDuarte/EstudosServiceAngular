@@ -1,0 +1,50 @@
+.container {
+  border: 1px solid black;
+  width: 200px;
+  height: 350px;
+
+  display: flex;
+  flex-direction: column;
+  background-color: #232323;
+  border-radius: 10px;
+}
+
+
+.main {
+  margin: 0 auto;
+}
+
+.main h3 {
+  color: white;
+}
+
+.body {
+  background-color: #616161;
+  width: 90%;
+  margin: 0 auto;
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body img {
+  display: flex;
+  width: 200px;
+  height: 100%;
+}
+
+.status {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.status .status-type {
+  color: rgb(38, 38, 38);
+  font-weight: bold;
+  background-color: coral;
+  padding: 5px;
+  margin-right: 4px;
+  border-radius: 5px;
+}
